@@ -2,6 +2,11 @@
 
 namespace AKlump\DefaultValue;
 
+use Exception;
+use ReflectionClass;
+use ReflectionException;
+use stdClass;
+
 /**
  * Computes default values by type.
  */
@@ -27,7 +32,7 @@ class DefaultValue {
         return NULL;
 
       case 'object':
-        return new \stdClass();
+        return new stdClass();
 
       case 'array':
         return [];
@@ -61,9 +66,9 @@ class DefaultValue {
    */
   protected static function getDefaultFromClassname(string $classname) {
     try {
-      $class = new \ReflectionClass($classname);
+      $class = new ReflectionClass($classname);
     }
-    catch (\ReflectionException $exception) {
+    catch (ReflectionException $exception) {
       throw new IndeterminateDefaultValueException($classname, $exception->getMessage(), IndeterminateDefaultValueException::OBJ_MISSING_CLASS, $exception);
     }
     if (!$class->isInstantiable()) {
@@ -78,8 +83,8 @@ class DefaultValue {
         return new $classname();
       }
     }
-    catch (\Exception $exception) {
-      throw new IndeterminateDefaultValueException($classname, sprintf('"%s" has no __constructor() method.', $classname, IndeterminateDefaultValueException::OBJ_NO_CONSTRUCTOR));
+    catch (Exception $exception) {
+      throw new IndeterminateDefaultValueException($classname, sprintf('"%s" has no __constructor() method.', $classname), IndeterminateDefaultValueException::OBJ_NO_CONSTRUCTOR);
     }
 
     // Constructor requires one or more parameters.

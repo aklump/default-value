@@ -31,7 +31,7 @@ foreach ($variable_types as $variable_type) {
 
 When using within a Drupal installation use the
 class `\Drupal\Component\Utility\DefaultValue` and you'll get special Drupal
-suport, in addition to the vanilla PHP explained above.
+support, in addition to the vanilla PHP explained above.
 
 ```php
 <?php

@@ -6,6 +6,9 @@ use AKlump\DefaultValue\DefaultValue as DefaultValueBase;
 use AKlump\DefaultValue\IndeterminateDefaultValueException;
 use Drupal;
 use Drupal\Core\DependencyInjection\ContainerInjectionInterface;
+use ReflectionClass;
+use ReflectionException;
+use ReflectionMethod;
 use Symfony\Component\DependencyInjection\Exception\ServiceNotFoundException;
 
 /**
@@ -25,7 +28,7 @@ final class DefaultValue extends DefaultValueBase {
   public static function get(string $type) {
     if (substr($type, 0, 1) === '@') {
       try {
-        return \Drupal::service(trim($type, '@'));
+        return Drupal::service(trim($type, '@'));
       }
       catch (ServiceNotFoundException $exception) {
         throw new IndeterminateDefaultValueException($type, $exception->getMessage(), IndeterminateDefaultValueException::OBJ_MISSING_CLASS, $exception);
@@ -40,29 +43,22 @@ final class DefaultValue extends DefaultValueBase {
    */
   protected static function getDefaultFromClassname(string $classname) {
     try {
-      return parent::getDefaultFromClassname($classname);
-    }
-    catch (IndeterminateDefaultValueException $exception) {
-
-      $class = new \ReflectionClass($classname);
+      $class = new ReflectionClass($classname);
       if ($class->implementsInterface(ContainerInjectionInterface::class)) {
-        return $type::create(Drupal::getContainer());
+        return $classname::create(Drupal::getContainer());
       }
-
-      $methods = array_filter($class->getMethods(\ReflectionMethod::IS_STATIC), function ($item) {
-        return $item->getShortName() === 'create' && $item->getNumberOfRequiredParameters() === 0;
-      });
-      if ($methods) {
-        return $type::create();
-      }
-
-      // However we may still be unable to determine the default, so re-throw.
-      throw $exception;
     }
+    catch (ReflectionException $exception) {
+      throw new IndeterminateDefaultValueException($classname, $exception->getMessage(), IndeterminateDefaultValueException::OBJ_MISSING_CLASS, $exception);
+    }
+
+    foreach ($class->getMethods(ReflectionMethod::IS_STATIC) as $method) {
+      if ($method->getShortName() === 'create' && $method->getNumberOfRequiredParameters() === 0) {
+        return $classname::create();
+      }
+    }
+
+    return parent::getDefaultFromClassname($classname);
   }
 
-  private function getServiceMap() {
-
-    return $serviceMap;
-  }
 }
