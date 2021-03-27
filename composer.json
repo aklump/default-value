@@ -6,8 +6,8 @@
         {
             "name": "Aaron Klump",
             "email": "sourcecode@intheloftstudios.com",
-            "homepage": "",
-            "role": ""
+            "homepage": "https://github.com/aklump/default-value",
+            "role": "Developer"
         }
     ],
     "require": {
