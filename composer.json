@@ -1,0 +1,22 @@
+{
+    "name": "aklump/default-value",
+    "description": "Calculates the default value based on variable type, including fully-qualified classnames.",
+    "version": "0.0.1",
+    "authors": [
+        {
+            "name": "Aaron Klump",
+            "email": "sourcecode@intheloftstudios.com",
+            "homepage": "",
+            "role": ""
+        }
+    ],
+    "require": {
+        "php": ">=7.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "AKlump\\DefaultValue\\": "src\/",
+            "Drupal\\Component\\Utility": "src\/Drupal\/"
+        }
+    }
+}
