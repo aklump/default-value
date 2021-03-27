@@ -50,10 +50,14 @@ final class DefaultValue extends DefaultValueBase {
     catch (ReflectionException $exception) {
       throw new IndeterminateDefaultValueException($classname, $exception->getMessage(), IndeterminateDefaultValueException::OBJ_MISSING_CLASS, $exception);
     }
-
-    $method = $class->getMethod('create');
-    if ($method->getNumberOfRequiredParameters() === 0) {
-      return $classname::create();
+    try {
+      $method = $class->getMethod('create');
+      if ($method->getNumberOfRequiredParameters() === 0) {
+        return $classname::create();
+      }
+    }
+    catch (ReflectionException $exception) {
+      // No problem if the create method doesn't exist, we'll just keep looking.
     }
 
     return parent::getDefaultFromClassname($classname);
