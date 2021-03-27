@@ -51,7 +51,7 @@ final class DefaultValue extends DefaultValueBase {
       throw new IndeterminateDefaultValueException($classname, $exception->getMessage(), IndeterminateDefaultValueException::OBJ_MISSING_CLASS, $exception);
     }
 
-    $method = $class->getMethod('create';
+    $method = $class->getMethod('create');
     if ($method->getNumberOfRequiredParameters() === 0) {
       return $classname::create();
     }
