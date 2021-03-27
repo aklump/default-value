@@ -8,7 +8,6 @@ use Drupal;
 use Drupal\Core\DependencyInjection\ContainerInjectionInterface;
 use ReflectionClass;
 use ReflectionException;
-use ReflectionMethod;
 use Symfony\Component\DependencyInjection\Exception\ServiceNotFoundException;
 
 /**
@@ -52,10 +51,9 @@ final class DefaultValue extends DefaultValueBase {
       throw new IndeterminateDefaultValueException($classname, $exception->getMessage(), IndeterminateDefaultValueException::OBJ_MISSING_CLASS, $exception);
     }
 
-    foreach ($class->getMethods(ReflectionMethod::IS_STATIC) as $method) {
-      if ($method->getShortName() === 'create' && $method->getNumberOfRequiredParameters() === 0) {
-        return $classname::create();
-      }
+    $method = $class->getMethod('create';
+    if ($method->getNumberOfRequiredParameters() === 0) {
+      return $classname::create();
     }
 
     return parent::getDefaultFromClassname($classname);
