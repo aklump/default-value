@@ -1,4 +1,5 @@
 {
+    "license": "GPL-2.0-or-later",
     "name": "aklump/default-value",
     "description": "Calculates the default value based on variable type, including fully-qualified classnames.",
     "version": "0.0.1",
@@ -15,8 +16,8 @@
     },
     "autoload": {
         "psr-4": {
-            "AKlump\\DefaultValue\\": "src\/",
-            "Drupal\\Component\\Utility\\": "src\/Drupal\/"
+            "AKlump\\DefaultValue\\": "src/",
+            "Drupal\\Component\\Utility\\": "src/Drupal/"
         }
     }
 }
