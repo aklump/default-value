@@ -16,7 +16,7 @@
     "autoload": {
         "psr-4": {
             "AKlump\\DefaultValue\\": "src\/",
-            "Drupal\\Component\\Utility": "src\/Drupal\/"
+            "Drupal\\Component\\Utility\\": "src\/Drupal\/"
         }
     }
 }
