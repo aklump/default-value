@@ -4,10 +4,7 @@ namespace Drupal\Component\Utility;
 
 use AKlump\DefaultValue\DefaultValue as DefaultValueBase;
 use AKlump\DefaultValue\IndeterminateDefaultValueException;
-use Drupal;
 use Drupal\Core\DependencyInjection\ContainerInjectionInterface;
-use ReflectionClass;
-use ReflectionException;
 use Symfony\Component\DependencyInjection\Exception\ServiceNotFoundException;
 
 /**
@@ -27,7 +24,7 @@ final class DefaultValue extends DefaultValueBase {
   public static function get(string $type) {
     if (substr($type, 0, 1) === '@') {
       try {
-        return Drupal::service(trim($type, '@'));
+        return \Drupal::service(trim($type, '@'));
       }
       catch (ServiceNotFoundException $exception) {
         throw new IndeterminateDefaultValueException($type, $exception->getMessage(), IndeterminateDefaultValueException::OBJ_MISSING_CLASS, $exception);
@@ -42,25 +39,21 @@ final class DefaultValue extends DefaultValueBase {
    */
   protected static function getDefaultFromClassname(string $classname) {
     try {
-      $class = new ReflectionClass($classname);
+      return parent::getDefaultFromClassname($classname);
+    }
+    catch (IndeterminateDefaultValueException $exception) {
+      $class = new \ReflectionClass($classname);
       if ($class->implementsInterface(ContainerInjectionInterface::class)) {
-        return $classname::create(Drupal::getContainer());
+        return $classname::create(\Drupal::getContainer());
+      }
+      if ($class->isInstantiable()) {
+        $method = $class->getMethod('create');
+        if ($method->getNumberOfRequiredParameters() === 0) {
+          return $classname::create();
+        }
       }
     }
-    catch (ReflectionException $exception) {
-      throw new IndeterminateDefaultValueException($classname, $exception->getMessage(), IndeterminateDefaultValueException::OBJ_MISSING_CLASS, $exception);
-    }
-    try {
-      $method = $class->getMethod('create');
-      if ($method->getNumberOfRequiredParameters() === 0) {
-        return $classname::create();
-      }
-    }
-    catch (ReflectionException $exception) {
-      // No problem if the create method doesn't exist, we'll just keep looking.
-    }
-
-    return parent::getDefaultFromClassname($classname);
+    throw $exception;
   }
 
 }
