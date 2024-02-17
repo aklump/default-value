@@ -70,6 +70,19 @@ class DefaultValueTest extends TestCase {
       $this->assertSame($expected, $default);
     }
   }
+
+  /**
+   * @dataProvider dataFortestInvokeProvider
+   */
+  public function testInvokeAllCaps($expected, string $type) {
+    $default = DefaultValue::get(strtoupper($type));
+    if (is_object($expected)) {
+      $this->assertEquals($expected, $default);
+    }
+    else {
+      $this->assertSame($expected, $default);
+    }
+  }
 }
 
 class FooBar {
