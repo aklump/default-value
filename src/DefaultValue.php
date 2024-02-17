@@ -37,6 +37,7 @@ class DefaultValue {
       case 'array':
         return [];
 
+      case 'bool':
       case 'boolean':
         return FALSE;
 
@@ -44,6 +45,8 @@ class DefaultValue {
       case 'double':
         return floatval(NULL);
 
+      case 'number':
+      case 'int':
       case 'integer':
         return 0;
 
@@ -75,16 +78,16 @@ class DefaultValue {
       throw new IndeterminateDefaultValueException($classname, sprintf('"%s" is not instantiable.', $classname), IndeterminateDefaultValueException::OBJ_CANNOT_INSTANTIATE);
     }
 
-    // See if we have __construct() with no required parameters.
     try {
       $constructor = $class->getMethod('__construct');
       $constructor_param_count = $constructor->getNumberOfRequiredParameters();
-      if ($constructor_param_count === 0) {
-        return new $classname();
-      }
+      $can_construct = 0 === $constructor_param_count;
     }
-    catch (Exception $exception) {
-      throw new IndeterminateDefaultValueException($classname, sprintf('"%s" has no __constructor() method.', $classname), IndeterminateDefaultValueException::OBJ_NO_CONSTRUCTOR);
+    catch (\Exception $exception) {
+      $can_construct = TRUE;
+    }
+    if ($can_construct) {
+      return new $classname();
     }
 
     // Constructor requires one or more parameters.
