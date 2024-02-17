@@ -1,23 +1,31 @@
 {
-    "license": "GPL-2.0-or-later",
-    "name": "aklump\/default-value",
-    "description": "Calculates the default value based on variable type, including fully-qualified classnames.",
-    "version": "0.0.3",
-    "authors": [
-        {
-            "name": "Aaron Klump",
-            "email": "sourcecode@intheloftstudios.com",
-            "homepage": "https:\/\/github.com\/aklump\/default-value",
-            "role": "Developer"
-        }
-    ],
-    "require": {
-        "php": ">=7.0"
-    },
-    "autoload": {
-        "psr-4": {
-            "AKlump\\DefaultValue\\": "src\/",
-            "Drupal\\Component\\Utility\\": "src\/Drupal\/"
-        }
+  "license": "GPL-2.0-or-later",
+  "name": "aklump/default-value",
+  "description": "Calculates the default value based on variable type, including fully-qualified classnames.",
+  "authors": [
+    {
+      "name": "Aaron Klump",
+      "email": "sourcecode@intheloftstudios.com",
+      "homepage": "https://github.com/aklump/default-value",
+      "role": "Developer"
     }
+  ],
+  "require": {
+    "php": ">=7.0"
+  },
+  "require-dev": {
+    "phpunit/phpunit": "^9.6",
+    "aklump/phpswap": "^0.0.7"
+  },
+  "autoload": {
+    "psr-4": {
+      "AKlump\\DefaultValue\\": "src/",
+      "Drupal\\Component\\Utility\\": "src/Drupal/"
+    }
+  },
+  "autoload-dev": {
+    "psr-4": {
+      "AKlump\\DefaultValue\\Tests\\Unit\\": "./tests_unit"
+    }
+  }
 }
