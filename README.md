@@ -10,10 +10,14 @@ classname.
 
 $variable_types = [
   'array',
+  'bool',
+  'boolean',
   'double',
   'float',
+  'int',
   'integer',
   'null',
+  'number',
   'object',
   'string',
 
